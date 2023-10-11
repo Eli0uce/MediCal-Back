@@ -1,3 +1,12 @@
+<?php
+use App\Models\Rendezvous;
+use App\Models\User;
+
+$rendezvous = Rendezvous::all();
+$users = User::all();
+?>
+
+
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -13,6 +22,7 @@
     <script src='fullcalendar/core/locales/fr.global.js'></script>
     <link href="/css/style.css" rel="stylesheet" />
     <script>
+        var auth = @json(auth()->check());
         var rendezvous = @json($rendezvous);
     </script>
     <script src="/js/fullCalendar.js"></script>
@@ -34,8 +44,7 @@
             <a href="#" class="text-white text-xl font-medium" id="open-login-modal"><i class="fa-solid fa-user"></i>
                 <span class="hidden sm:inline">Connexion</span></a>
         @else
-            <a href="{{ route('logout') }}" class="text-white text-xl font-medium" id="open-rdv-modal"><i
-                    class="fa-solid fa-calendar"></i>
+            <a href="{{ route('logout') }}" class="text-white text-xl font-medium" id="open-rdv-modal">
                 <span class="hidden sm:inline">Se déconnecter</span></a>
         @endguest
     </header>
