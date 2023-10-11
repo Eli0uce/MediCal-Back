@@ -20,6 +20,7 @@ Route::get('/', function () {
     if (Auth::check()) {
         return view('medical', compact('medecins', 'rendezvous'));
     }
+
     return view('medical');
 })->name('medical');
 Route::post('/login', [AuthController::class, 'login'])->name('login');

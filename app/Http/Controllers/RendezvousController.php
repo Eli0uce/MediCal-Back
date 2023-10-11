@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use App\Models\Rendezvous;
 use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class RendezvousController extends Controller
 {
@@ -27,8 +26,8 @@ class RendezvousController extends Controller
 
         $rdv = new Rendezvous();
         $rdv->medecin_id = $request->input('medecin');
-        $rdv->patient = $request->input('name') . ' ' . $request->input('firstname');
-        $rdv->date_et_heure = $request->input('date') . 'T' . $request->input('heure');
+        $rdv->patient = $request->input('name').' '.$request->input('firstname');
+        $rdv->date_et_heure = $request->input('date').'T'.$request->input('heure');
         $rdv->motif = $request->input('motif');
         $rdv->duree = $request->input('duree');
         $rdv->save();
