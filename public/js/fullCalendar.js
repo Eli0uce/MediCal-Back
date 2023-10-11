@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 var eventData = rendezvous[i];
                 if (auth) {
                     var endDate = new Date(eventData.date_et_heure);
-                    endDate.setTime(endDate.getTime() + 15 * 60 * 1000);
+                    endDate.setTime(endDate.getTime() + 60 * 60 * 1000);
 
                     // Obtenir les composants de date et d'heure de endDate
                     var year = endDate.getFullYear();
