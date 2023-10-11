@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\RendezvousController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -19,11 +20,12 @@ Route::get('/', function () {
     if (Auth::check()) {
         return view('medical', compact('medecins', 'rendezvous'));
     }
-
     return view('medical');
 })->name('medical');
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+
+Route::post('/new-rdv', [RendezvousController::class, 'store'])->name('new-rdv');
 
 Route::get('/error', function () {
     return view('error');

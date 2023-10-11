@@ -29,6 +29,7 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             if (Hash::check($credentials['password'], Auth::user()->password)) {
+                // L'utilisateur est connecté, chargez les données
                 return view('medical', compact('medecins', 'rendezvous'));
             } else {
                 return redirect()->route('error')->withErrors([
@@ -37,15 +38,16 @@ class AuthController extends Controller
             }
         }
 
-        return redirect()->route('error')->withErrors([
-            'password' => 'Le mot de passe fourni est incorrect.',
-        ]);
+        // L'utilisateur n'est pas connecté, chargez les données
+        return view('medical', compact('medecins', 'rendezvous'));
     }
 
     public function logout(Request $request)
     {
+        $medecins = User::all();
+        $rendezvous = Rendezvous::all();
         Auth::logout();
 
-        return redirect()->route('medical');
+        return redirect()->route('medical', compact('medecins', 'rendezvous'));
     }
 }

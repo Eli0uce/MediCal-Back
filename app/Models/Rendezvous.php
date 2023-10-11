@@ -16,4 +16,9 @@ class Rendezvous extends Model
         'motif',
         'duree',
     ];
+
+    public function medecin()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
