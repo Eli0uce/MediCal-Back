@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\User;
 use App\Models\Rendezvous;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class MedicalController extends Controller

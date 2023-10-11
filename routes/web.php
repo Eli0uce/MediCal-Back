@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\MedicalController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\MedicalController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------

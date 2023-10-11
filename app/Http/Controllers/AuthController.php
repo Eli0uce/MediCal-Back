@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,7 +18,7 @@ class AuthController extends Controller
 
         $user = User::where('email', $credentials['email'])->first();
 
-        if (!$user) {
+        if (! $user) {
             return redirect()->back()->withErrors([
                 'email' => 'L\'identifiant fourni n\'existe pas.',
             ]);
@@ -35,7 +34,6 @@ class AuthController extends Controller
             'password' => 'Le mot de passe fourni est incorrect.',
         ]);
     }
-
 
     public function logout(Request $request)
     {
