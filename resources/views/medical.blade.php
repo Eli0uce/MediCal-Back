@@ -115,7 +115,7 @@ $medecins = User::all();
                     </div>
                     <div class="ml-10 mb-4">
                         <label for="hour" class="block text-white">Heure</label>
-                        <input type="number" id="hour" name="hour"
+                        <input type="text" id="hour" name="hour"
                             class="w-72 border rounded-lg p-2 focus:ring focus:ring-blue-300" placeholder="Heure" />
                     </div>
                 </div>
