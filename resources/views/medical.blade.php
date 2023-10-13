@@ -87,11 +87,12 @@ $medecins = User::all();
             <form method="POST" action="{{ route('new-rdv') }}" id="rdv-form">
                 @csrf
                 <div class="mb-4">
-                    <label for="medecin_id" class="block text-white">Médecin</label>
-                    <select name="medecin_id" id="medecin_id">
+                    <label for="medecin" class="block text-white">Médecin</label>
+                    <select name="medecin" id="medecin" required>
                         <option value="" selected disabled>Choisissez un médecin</option>
                         @foreach ($medecins as $medecin)
-                            <option value="{{ $medecin->id }}">{{ $medecin->name }} {{ $medecin->firstname }}</option>
+                            <option value="{{ $medecin->medecin_id }}">{{ $medecin->nom }} {{ $medecin->prenom }}
+                            </option>
                         @endforeach
                     </select>
                 </div>
@@ -114,8 +115,8 @@ $medecins = User::all();
                             class="w-72 border rounded-lg p-2 focus:ring focus:ring-blue-300" />
                     </div>
                     <div class="ml-10 mb-4">
-                        <label for="hour" class="block text-white">Heure</label>
-                        <input type="text" id="hour" name="hour"
+                        <label for="heure" class="block text-white">Heure</label>
+                        <input type="text" id="heure" name="heure"
                             class="w-72 border rounded-lg p-2 focus:ring focus:ring-blue-300" placeholder="Heure" />
                     </div>
                 </div>
@@ -128,7 +129,8 @@ $medecins = User::all();
                     <div class="ml-10 mb-4">
                         <label for="duree" class="block text-white">Duree</label>
                         <input type="number" id="duree" name="duree"
-                            class="w-72 border rounded-lg p-2 focus:ring focus:ring-blue-300" placeholder="Durée" max="120" />
+                            class="w-72 border rounded-lg p-2 focus:ring focus:ring-blue-300" placeholder="Durée"
+                            max="120" />
                     </div>
                 </div>
                 <div class="flex">
@@ -136,7 +138,8 @@ $medecins = User::all();
                         class="mt-5 bg-blue-custom text-white rounded-xl py-2 px-4 hover:bg-blue-custom focus:outline-none focus:ring focus:ring-blue-300">
                         <i class="fa-solid fa-bookmark"></i> Prendre rendez-vous
                     </button>
-                    <a href="/" class="mt-5 return bg-gray-custom text-white rounded-xl py-2 px-4 hover:bg-gray-custom">
+                    <a href="/"
+                        class="mt-5 return bg-gray-custom text-white rounded-xl py-2 px-4 hover:bg-gray-custom">
                         Retour
                     </a>
                 </div>
@@ -178,6 +181,16 @@ $medecins = User::all();
                 </div>
             </div>
     </main>
+
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
     <!-- Footer -->
     <footer class="bg-gray-custom text-white py-4">

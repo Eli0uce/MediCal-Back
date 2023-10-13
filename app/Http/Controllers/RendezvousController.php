@@ -16,18 +16,22 @@ class RendezvousController extends Controller
 
         $validator = Validator::make($request->all(), [
             'medecin' => 'required',
+            'name' => 'required',
+            'firstname' => 'required',
             'date' => 'required',
             'heure' => 'required',
+            'motif' => 'required',
+            'duree' => 'required',
         ]);
 
         if ($validator->fails()) {
-            return redirect()->route('error')->withErrors($validator);
+            return redirect()->back()->withErrors($validator)->withInput();
         }
 
         $rdv = new Rendezvous();
         $rdv->medecin_id = $request->input('medecin');
         $rdv->patient = $request->input('name').' '.$request->input('firstname');
-        $rdv->date_et_heure = $request->input('date').'T'.$request->input('heure');
+        $rdv->date_et_heure = $request->input('date').'T'.$request->input('heure').':00';
         $rdv->motif = $request->input('motif');
         $rdv->duree = $request->input('duree');
         $rdv->save();
