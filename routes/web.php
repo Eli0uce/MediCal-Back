@@ -27,6 +27,7 @@ Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::post('/new-rdv', [RendezvousController::class, 'store'])->name('new-rdv');
+Route::post('/new-rdv-medecin', [RendezvousController::class, 'storeMedecin'])->name('new-rdv-medecin');
 
 Route::get('/error', function () {
     return view('error');

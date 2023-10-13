@@ -4,6 +4,7 @@ use App\Models\User;
 
 $rendezvous = Rendezvous::all();
 $medecins = User::all();
+$auth = auth()->user();
 ?>
 
 <!DOCTYPE html>
@@ -81,14 +82,14 @@ $medecins = User::all();
         </div>
     </div>
 
-    <!-- Carte modale de rendez-vous -->
+    <!-- Carte modale de rendez-vous patient -->
     <div class="modal hidden mx-auto fixed inset-0 flex w-max items-center justify-center mt-52 z-50" id="rdv-modal">
         <div class="modal-content bg-gray-custom mx-auto rounded-lg shadow-lg p-6">
             <form method="POST" action="{{ route('new-rdv') }}" id="rdv-form">
                 @csrf
                 <div class="mb-4">
                     <label for="medecin" class="block text-white">Médecin</label>
-                    <select name="medecin" id="medecin" required>
+                    <select name="medecin" id="medecin" class="p-2 rounded-md" required>
                         <option value="" selected disabled>Choisissez un médecin</option>
                         @foreach ($medecins as $medecin)
                             <option value="{{ $medecin->medecin_id }}">{{ $medecin->nom }} {{ $medecin->prenom }}
@@ -126,11 +127,65 @@ $medecins = User::all();
                         <input type="text" id="motif" name="motif"
                             class="w-72 border rounded-lg p-2 focus:ring focus:ring-blue-300" placeholder="Motif" />
                     </div>
+                </div>
+                <div class="flex">
+                    <button type="submit"
+                        class="mt-5 bg-blue-custom text-white rounded-xl py-2 px-4 hover:bg-blue-custom focus:outline-none focus:ring focus:ring-blue-300">
+                        <i class="fa-solid fa-bookmark"></i> Prendre rendez-vous
+                    </button>
+                    <a href="/"
+                        class="mt-5 return bg-gray-custom text-white rounded-xl py-2 px-4 hover:bg-gray-custom">
+                        Retour
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Carte modale de rendez-vous medecin -->
+    <div class="modal hidden mx-auto fixed inset-0 flex w-max items-center justify-center mt-52 z-50" id="rdv-modal-medecin">
+        <div class="modal-content bg-gray-custom mx-auto rounded-lg shadow-lg p-6">
+            <form method="POST" action="{{ route('new-rdv-medecin') }}" id="rdv-form-medecin">
+                @csrf
+                <div class="hidden">
+                    <div class="mb-4">
+                        <input type="text" name="medecin" id="medecin" value={{ $auth->medecin_id }} disabled>
+                    </div>
+                </div>
+                <div class="flex w-full">
+                    <div class="mb-4">
+                        <label for="name" class="block text-white">Nom</label>
+                        <input type="text" id="name" name="name"
+                            class="w-72 border rounded-lg p-2 focus:ring focus:ring-blue-300" placeholder="Nom" />
+                    </div>
                     <div class="ml-10 mb-4">
-                        <label for="duree" class="block text-white">Duree</label>
-                        <input type="number" id="duree" name="duree"
-                            class="w-72 border rounded-lg p-2 focus:ring focus:ring-blue-300" placeholder="Durée"
-                            max="120" />
+                        <label for="firstname" class="block text-white">Prénom</label>
+                        <input type="text" id="firstname" name="firstname"
+                            class="w-72 border rounded-lg p-2 focus:ring focus:ring-blue-300" placeholder="Prénom" />
+                    </div>
+                </div>
+                <div class="flex w-full">
+                    <div class="mb-4">
+                        <label for="date" class="block text-white">Date</label>
+                        <input type="date" id="date" name="date"
+                            class="w-72 border rounded-lg p-2 focus:ring focus:ring-blue-300" />
+                    </div>
+                    <div class="ml-10 mb-4">
+                        <label for="heure" class="block text-white">Heure</label>
+                        <input type="text" id="heure" name="heure"
+                            class="w-72 border rounded-lg p-2 focus:ring focus:ring-blue-300" placeholder="Heure" />
+                    </div>
+                </div>
+                <div class="flex w-full">
+                    <div class="mb-4">
+                        <label for="motif" class="block text-white">Motif</label>
+                        <input type="text" id="motif" name="motif"
+                            class="w-72 border rounded-lg p-2 focus:ring focus:ring-blue-300" placeholder="Motif" />
+                    </div>
+                    <div class="ml-10 mb-4">
+                        <label for="duree" class="block text-white">Durée</label>
+                        <input type="number" id="duree" name="duree" max="60" min="15"
+                            class="w-72 border rounded-lg p-2 focus:ring focus:ring-blue-300" placeholder="Durée" />
                     </div>
                 </div>
                 <div class="flex">
@@ -174,23 +229,13 @@ $medecins = User::all();
                     <div>
                         <button
                             class="mt-5 bg-blue-custom text-white rounded-xl py-2 px-4 hover:bg-blue-custom focus:outline-none focus:ring focus:ring-blue-300"
-                            id="open-rdv-modal">
+                            @if (Auth::check()) id="open-rdv-modal-medecin" @else id="open-rdv-modal" @endif>
                             <i class="fa-solid fa-bookmark"></i> Prendre rendez-vous
                         </button>
                     </div>
                 </div>
             </div>
     </main>
-
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
 
     <!-- Footer -->
     <footer class="bg-gray-custom text-white py-4">
@@ -203,6 +248,7 @@ $medecins = User::all();
     <script>
         const loginModal = document.getElementById("login-modal");
         const rdvModal = document.getElementById("rdv-modal");
+        const rdvModalMedecin = document.getElementById("rdv-modal-medecin");
 
         // JavaScript pour gérer l'affichage de la modal de connexion
         const openLoginModalButton = document.getElementById("open-login-modal");
@@ -210,10 +256,16 @@ $medecins = User::all();
             loginModal.style.display = "block";
         });
 
-        // JavaScript pour gérer l'affichage de la modal de rendez-vous
+        // JavaScript pour gérer l'affichage de la modal de rendez-vous pour les patients
         const openRdvModalButton = document.getElementById("open-rdv-modal");
         openRdvModalButton.addEventListener("click", () => {
             rdvModal.style.display = "block";
+        });
+
+        // JavaScript pour gérer l'affichage de la modal de rendez-vous pour les médecins
+        const openRdvModalMedecinButton = document.getElementById("open-rdv-modal-medecin");
+        openRdvModalMedecinButton.addEventListener("click", () => {
+            rdvModalMedecin.style.display = "block";
         });
     </script>
 </body>

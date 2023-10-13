@@ -15,10 +15,39 @@ class RendezvousController extends Controller
         $rendezvous = Rendezvous::all();
 
         $validator = Validator::make($request->all(), [
-            'medecin' => 'required',
+            'medecin' => 'required|exists:users,id',
             'name' => 'required',
             'firstname' => 'required',
-            'date' => 'required',
+            'date' => 'required|date',
+            'heure' => 'required',
+            'motif' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        $rdv = new Rendezvous();
+        $rdv->medecin_id = $request->input('medecin');
+        $rdv->patient = $request->input('name').' '.$request->input('firstname');
+        $rdv->date_et_heure = $request->input('date').'T'.$request->input('heure').':00';
+        $rdv->motif = $request->input('motif');
+        $rdv->duree = '15';
+        $rdv->save();
+
+        return view('medical', compact('medecins', 'rendezvous'));
+    }
+
+    public function storeMedecin(Request $request)
+    {
+        $medecins = User::all();
+        $rendezvous = Rendezvous::all();
+
+        $validator = Validator::make($request->all(), [
+            'medecin' => 'required|exists:users,id',
+            'name' => 'required',
+            'firstname' => 'required',
+            'date' => 'required|date',
             'heure' => 'required',
             'motif' => 'required',
             'duree' => 'required',
