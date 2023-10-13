@@ -41,13 +41,13 @@ $auth = auth()->user();
         </div>
 
         <!-- Bouton de connexion à droite -->
-        @guest
-            <button class="text-white text-xl font-medium" id="open-login-modal"><i class="fa-solid fa-user"></i>
-                <span class="hidden sm:inline">Connexion</span></button>
-        @else
+        @auth
             <a href="{{ route('logout') }}" class="text-white text-xl font-medium" id="open-rdv-modal">
                 <span class="hidden sm:inline">Se déconnecter</span></a>
-        @endguest
+        @else
+            <button class="text-white text-xl font-medium" id="open-login-modal"><i class="fa-solid fa-user"></i>
+                <span class="hidden sm:inline">Connexion</span></button>
+        @endauth
     </header>
 
     <!-- Carte modale de connexion -->
@@ -143,48 +143,50 @@ $auth = auth()->user();
     </div>
 
     <!-- Carte modale de rendez-vous medecin -->
-    <div class="modal hidden mx-auto fixed inset-0 flex w-max items-center justify-center mt-52 z-50" id="rdv-modal-medecin">
+    <div class="modal hidden mx-auto fixed inset-0 flex w-max items-center justify-center mt-52 z-50"
+        id="rdv-modal-medecin">
         <div class="modal-content bg-gray-custom mx-auto rounded-lg shadow-lg p-6">
             <form method="POST" action="{{ route('new-rdv-medecin') }}" id="rdv-form-medecin">
                 @csrf
                 <div class="hidden">
                     <div class="mb-4">
-                        <input type="text" name="medecin" id="medecin" value={{ $auth->medecin_id }} disabled>
+                        <input type="text" name="medecin-med" id="medecin-med" value={{ Auth::user() }}
+                            disabled>
                     </div>
                 </div>
                 <div class="flex w-full">
                     <div class="mb-4">
-                        <label for="name" class="block text-white">Nom</label>
-                        <input type="text" id="name" name="name"
+                        <label for="name-med" class="block text-white">Nom</label>
+                        <input type="text" id="name-med" name="name-med"
                             class="w-72 border rounded-lg p-2 focus:ring focus:ring-blue-300" placeholder="Nom" />
                     </div>
                     <div class="ml-10 mb-4">
-                        <label for="firstname" class="block text-white">Prénom</label>
-                        <input type="text" id="firstname" name="firstname"
+                        <label for="firstname-med" class="block text-white">Prénom</label>
+                        <input type="text" id="firstname-med" name="firstname-med"
                             class="w-72 border rounded-lg p-2 focus:ring focus:ring-blue-300" placeholder="Prénom" />
                     </div>
                 </div>
                 <div class="flex w-full">
                     <div class="mb-4">
-                        <label for="date" class="block text-white">Date</label>
-                        <input type="date" id="date" name="date"
+                        <label for="date-med" class="block text-white">Date</label>
+                        <input type="date" id="date-med" name="date-med"
                             class="w-72 border rounded-lg p-2 focus:ring focus:ring-blue-300" />
                     </div>
                     <div class="ml-10 mb-4">
-                        <label for="heure" class="block text-white">Heure</label>
-                        <input type="text" id="heure" name="heure"
+                        <label for="heure-med" class="block text-white">Heure</label>
+                        <input type="text" id="heure-med" name="heure-med"
                             class="w-72 border rounded-lg p-2 focus:ring focus:ring-blue-300" placeholder="Heure" />
                     </div>
                 </div>
                 <div class="flex w-full">
                     <div class="mb-4">
-                        <label for="motif" class="block text-white">Motif</label>
-                        <input type="text" id="motif" name="motif"
+                        <label for="motif-med" class="block text-white">Motif</label>
+                        <input type="text" id="motif-med" name="motif-med"
                             class="w-72 border rounded-lg p-2 focus:ring focus:ring-blue-300" placeholder="Motif" />
                     </div>
                     <div class="ml-10 mb-4">
-                        <label for="duree" class="block text-white">Durée</label>
-                        <input type="number" id="duree" name="duree" max="60" min="15"
+                        <label for="duree-med" class="block text-white">Durée</label>
+                        <input type="number" id="duree-med" name="duree-med" max="60" min="15"
                             class="w-72 border rounded-lg p-2 focus:ring focus:ring-blue-300" placeholder="Durée" />
                     </div>
                 </div>
@@ -204,12 +206,12 @@ $auth = auth()->user();
 
     <!-- Section principale -->
     <main class="bg-gray-100 py-8 px-20 w-full">
-        @guest
-            <h1 class="text-4xl font-semibold mb-8">Bienvenue sur MediCal</h1>
-        @else
+        @auth
             <h1 class="text-4xl font-semibold mb-8">Bienvenue sur MediCal, Dr. {{ Auth::user()->prenom }}
                 {{ Auth::user()->nom }}</h1>
-        @endguest
+        @else
+            <h1 class="text-4xl font-semibold mb-8">Bienvenue sur MediCal</h1>
+        @endauth
         <p class="text-xl mb-8">
             MediCal est une plateforme de prise de rendez-vous en ligne pour les
             professionnels de santé.
@@ -235,6 +237,7 @@ $auth = auth()->user();
                     </div>
                 </div>
             </div>
+        </div>
     </main>
 
     <!-- Footer -->
@@ -259,12 +262,14 @@ $auth = auth()->user();
         // JavaScript pour gérer l'affichage de la modal de rendez-vous pour les patients
         const openRdvModalButton = document.getElementById("open-rdv-modal");
         openRdvModalButton.addEventListener("click", () => {
+            console.log("test");
             rdvModal.style.display = "block";
         });
 
         // JavaScript pour gérer l'affichage de la modal de rendez-vous pour les médecins
         const openRdvModalMedecinButton = document.getElementById("open-rdv-modal-medecin");
         openRdvModalMedecinButton.addEventListener("click", () => {
+            console.log("test");
             rdvModalMedecin.style.display = "block";
         });
     </script>

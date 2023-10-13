@@ -44,13 +44,13 @@ class RendezvousController extends Controller
         $rendezvous = Rendezvous::all();
 
         $validator = Validator::make($request->all(), [
-            'medecin' => 'required|exists:users,id',
-            'name' => 'required',
-            'firstname' => 'required',
-            'date' => 'required|date',
-            'heure' => 'required',
-            'motif' => 'required',
-            'duree' => 'required',
+            'medecin-med' => 'required|exists:users,id',
+            'name-med' => 'required',
+            'firstname-med' => 'required',
+            'date-med' => 'required|date',
+            'heure-med' => 'required',
+            'motif-med' => 'required',
+            'duree-med' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -58,11 +58,11 @@ class RendezvousController extends Controller
         }
 
         $rdv = new Rendezvous();
-        $rdv->medecin_id = $request->input('medecin');
-        $rdv->patient = $request->input('name').' '.$request->input('firstname');
-        $rdv->date_et_heure = $request->input('date').'T'.$request->input('heure').':00';
-        $rdv->motif = $request->input('motif');
-        $rdv->duree = $request->input('duree');
+        $rdv->medecin_id = $request->input('medecin-med');
+        $rdv->patient = $request->input('name-med').' '.$request->input('firstname-med');
+        $rdv->date_et_heure = $request->input('date-med').'T'.$request->input('heure-med').':00';
+        $rdv->motif = $request->input('motif-med');
+        $rdv->duree = $request->input('duree-med');
         $rdv->save();
 
         return view('medical', compact('medecins', 'rendezvous'));
