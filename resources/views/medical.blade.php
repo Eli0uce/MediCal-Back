@@ -205,7 +205,7 @@ $auth = auth()->user();
     </div>
 
     <!-- Section principale -->
-    <main class="bg-gray-100 py-8 px-20 w-full">
+    <main class="bg-gray-100 py-8 px-5 md:px-20 w-full">
         @auth
             <h1 class="text-4xl font-semibold mb-8">Bienvenue sur MediCal, Dr. {{ Auth::user()->prenom }}
                 {{ Auth::user()->nom }}</h1>
@@ -226,7 +226,7 @@ $auth = auth()->user();
             </h2>
             <hr class="border-gray-300 mb-8 mx-96" />
             <div class="flex">
-                <div class="w-full mx-auto mr-10">
+                <div class="w-full mx-auto">
                     <div id='calendar'></div>
                     <div>
                         <button

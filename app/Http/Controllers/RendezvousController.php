@@ -15,7 +15,7 @@ class RendezvousController extends Controller
         $rendezvous = Rendezvous::all();
 
         $validator = Validator::make($request->all(), [
-            'medecin' => 'required|exists:users,id',
+            'medecin' => 'required|exists:users,medecin_id',
             'name' => 'required',
             'firstname' => 'required',
             'date' => 'required|date',
